@@ -20,21 +20,20 @@ function findReturnItems(SKIP = 0) {
 
             const totalEntries = await abnormalLossSchema.aggregate([
                 {
-                    $match: { issueType: "return" }, 
+                    $match: { issueType: "return" },
                 },
                 {
-                    $count: "totalCount", 
+                    $count: "totalCount",
                 }
             ]);
-            
 
-            if(totalEntries.length === 0)
-                {
-                    resolve({
-                        data: [],
-                        total: 0,
-                    })
-                }
+
+            if (totalEntries.length === 0) {
+                resolve({
+                    data: [],
+                    total: 0,
+                })
+            }
 
             const db = await abnormalLossSchema.aggregate([
                 {
@@ -64,22 +63,21 @@ function findWeightDiscrepancy(SKIP = 0) {
 
             const totalEntries = await abnormalLossSchema.aggregate([
                 {
-                    $match: { issueType: "weight_discrepancy" }, 
+                    $match: { issueType: "weight_discrepancy" },
                 },
                 {
-                    $count: "totalCount", 
+                    $count: "totalCount",
                 }
             ]);
 
-            
 
-            if(totalEntries.length === 0)
-                {
-                    resolve({
-                        data: [],
-                        total: 0,
-                    })
-                }
+
+            if (totalEntries.length === 0) {
+                resolve({
+                    data: [],
+                    total: 0,
+                })
+            }
 
             const db = await abnormalLossSchema.aggregate([
                 {
@@ -156,14 +154,12 @@ function deleteAbnormalLoss(orderId) {
     })
 }
 
-function getAllLosses(SKIP=0)
-{
+function getAllLosses(SKIP = 0) {
     return new Promise(async (resolve, reject) => {
         try {
             const totalEntries = await abnormalLossSchema.countDocuments();
 
-            if(totalEntries === 0)
-            {
+            if (totalEntries === 0) {
                 resolve({
                     data: [],
                     total: 0,
@@ -172,12 +168,17 @@ function getAllLosses(SKIP=0)
 
             const db = await abnormalLossSchema.aggregate([
                 {
-                    $skip: SKIP
+                    $sort: { 
+                        dateReported: -1 // Sort by dateReported, latest first
+                    }
                 },
                 {
-                    $limit: 10,
+                    $skip: SKIP // Skip the first SKIP entries for pagination
+                },
+                {
+                    $limit: 10 // Limit the results to 10 for pagination
                 }
-            ])
+            ]);
 
             resolve({
                 data: db,
