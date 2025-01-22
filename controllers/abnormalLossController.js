@@ -1,4 +1,4 @@
-const { addAbnormalLoss, findReturnItems, findWeightDiscrepancy, editReturn, editWeightDiscrepancy, findLossOrder, deleteAbnormalLoss, getAllLosses, getAbnormalLossByDate } = require("../modals/abnormalLossModal");
+const { addAbnormalLoss, findReturnItems, findWeightDiscrepancy, editReturn, editWeightDiscrepancy, findLossOrder, deleteAbnormalLoss, getAllLosses, getAbnormalLossByDate, findLossByOrderId } = require("../modals/abnormalLossModal");
 const { findOrder, deleteOrder } = require("../modals/orderModal");
 
 const addAbnormalLossContoller = async (req, res) => {
@@ -324,5 +324,36 @@ const getAbnormalLossByDateController = async (req, res) => {
 };
 
 
+const findLossByOrderIdController = async (req, res) => {
+    const {orderId} = req.body;
+   try {
+       const db = await findLossByOrderId(orderId);
 
-module.exports = { addAbnormalLossContoller, findReturnItemsController, findWeightDiscrepancyController, editReturnController, editWeightDiscrepancyController, deleteAbnormalLossController, getAllLossesController, getAbnormalLossByDateController };
+       if (!db) {
+        return res.send({
+            status: 404,
+            success: false,
+            message: "Order is not available",
+            error: "Data Invalid",
+        })
+    }
+       return res.send(
+           {
+               status: 200,
+               success: true,
+               message: "Read Success",
+               data: db,
+           }
+       )
+   } catch (error) {
+       return res.send({
+           status: 500,
+           success: false,
+           message: "Internal Server Error",
+           data: error,
+       })
+   }
+}
+
+
+module.exports = { addAbnormalLossContoller, findReturnItemsController, findWeightDiscrepancyController, editReturnController, editWeightDiscrepancyController, deleteAbnormalLossController, getAllLossesController, getAbnormalLossByDateController, findLossByOrderIdController };

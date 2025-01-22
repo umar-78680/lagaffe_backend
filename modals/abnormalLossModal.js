@@ -257,5 +257,16 @@ const getAbnormalLossByDate = (startDate, endDate, SKIP = null, LIMIT = null) =>
     });
 };
 
+const findLossByOrderId = (orderId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const orderDb = await abnormalLossSchema.findOne({ orderId });
+            resolve(orderDb);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
 
-module.exports = { addAbnormalLoss, findReturnItems, findWeightDiscrepancy, editReturn, editWeightDiscrepancy, findLossOrder, deleteAbnormalLoss, getAllLosses, getAbnormalLossByDate };
+
+module.exports = { addAbnormalLoss, findReturnItems, findWeightDiscrepancy, editReturn, editWeightDiscrepancy, findLossOrder, deleteAbnormalLoss, getAllLosses, getAbnormalLossByDate, findLossByOrderId };
