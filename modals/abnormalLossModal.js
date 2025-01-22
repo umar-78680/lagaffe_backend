@@ -40,6 +40,11 @@ function findReturnItems(SKIP = 0) {
                     $match: { issueType: "return" },
                 },
                 {
+                    $sort: { 
+                        dateReported: -1 // Sort by dateReported, latest first
+                    }
+                },
+                {
                     $skip: SKIP,
                 },
                 {
@@ -82,6 +87,11 @@ function findWeightDiscrepancy(SKIP = 0) {
             const db = await abnormalLossSchema.aggregate([
                 {
                     $match: { issueType: "weight_discrepancy" },
+                },
+                {
+                    $sort: { 
+                        dateReported: -1 // Sort by dateReported, latest first
+                    }
                 },
                 {
                     $skip: SKIP,
